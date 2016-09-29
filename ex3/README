@@ -1,0 +1,74 @@
+orib
+
+
+=============================
+=      File description     =
+=============================
+Matrix.hpp - File for the declaration of the template generic matrix.
+TraceException.h - Exception for wrong dimensions in trace.
+SubstractionException.h- Exception for wrong dimensions in substraction.
+AdditionException.h- Exception for wrong dimensions in addition.
+MultiplicationException.h - Exception for wrong dimensions in multiplication.
+MatrixAssignmentException.h - Exception for bad matrix assignment (=) .
+MatrixAllocException.h - Exception for error in memory allocation for matrix.
+MoveException.h - Exception for error in moving the matrix (move ctr).
+Makefile
+
+
+=============================================
+=          Answers for the questions        =
+=============================================
+
+Chart for results:
+
+
+           |    big                                 |           small  
+           |                                        |
+           |       *                     +          |         *                    +
+           |                                        |
+Parallel   |    3.33456 sec   |     0.032895 sec    |     5.7455e-05 sec |  8.1376e-05 sec 
+		   |                  |                     |                    |
+           |                  |                     |                    |
+           |                  |                     |                    |
+           |                  |                     |                    |
+Serial     |    14.8199 sec   |    0.0234938 sec    |    8.68e-07 sec    |  1.479e-06 sec
+
+
+1) There is a difference between the 2 sets of data which is:
+The program runs very fast on the small file on both operations and 
+on both states, and all actions take similar amount of time.
+while on the big file it runs fast only on the plus operation while 
+the mult operation takes relatively long time in both states of the
+big file. Also there is a decent difference of time between every 
+action in the big file.
+The program runs faster in the Serial state for all of the operations
+except for the mult in the big file which the Parallel runs faster on.
+
+The difference stems from the fact that small data files naturally take less
+time to process than big files. Also, using a different thread for 
+a different line in the matrix to compute the result matrix is more expensive
+than using a single process to compute the matrix, given that the amount
+of cells to compute is not too big. 
+We will benifit more from Parallel Programming when we try to divide 
+a big task into smaller tasks (threads), so for the small file its better
+to use Serial Programming.
+
+2) The difference between the operations is that the plus and minus operations are
+basically going over the matrix once and summing or substracting matching cells,
+so the amount of actions we perform is O(row * col) and so there isn't a big difference
+between parallel and serial regarding these operations since splitting the matrix 
+into thread lines won't benefit us a lot in this case.
+In the small file there is not much difference between the operations with a slight 
+advantage in performance for the mult operation, probably because the amount of the 
+actions between the operations is similar by a small extent.
+However, the mult operation is more complex because we perform O(m*n*k) operations 
+and here we can divide the problem into threads so each thread will compute
+it's line in the matrix by going over O(row * cols) cells, and by doing that it relieves
+pressure from the main process  (compared to the Serial) which would have had to make all of
+the calculations by itself, and we can see that indeed
+there is a big improvement in performance when it comes to big files, we saved more 
+than 10 seconds by using the parallel mult!
+
+
+
+

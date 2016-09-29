@@ -1,0 +1,27 @@
+CXX = g++ 
+CPPFLAGS = -c -std=c++11 -Wextra -Wall
+
+.DEFAULT_GOAL := IntMatrixMainDriver
+
+IntMatrixMainDriver: IntMatrix.o IntMatrixDriver.o
+	${CXX} IntMatrix.o IntMatrixDriver.o -o IntMatrixMainDriver
+
+IntMatrix: IntMatrix.h IntMatrix.cpp
+	${CXX} ${CPPFLAGS} IntMatrix.cpp
+
+IntMatrixDriver: IntMatrixDriver.cpp 
+	${CXX} ${CPPFLAGS} IntMatrixDriver.cpp 
+
+tar: 
+	tar cvf ex1.tar IntMatrix.h IntMatrix.cpp IntMatrixDriver.cpp Makefile 
+
+all:
+	make IntMatrixMainDriver 
+	make IntMatrix
+	make tar
+
+clean: 
+	rm IntMatrixMainDriver IntMatrix.o ex1.tar IntMatrixDriver.o
+
+
+.PHONY: all clean tar IntMatrix IntMatrixDriver

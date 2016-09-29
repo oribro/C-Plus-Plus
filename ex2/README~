@@ -1,0 +1,75 @@
+orib
+
+
+=============================
+=      File description     =
+=============================
+FileReader.h - This class represents a reader for the songs and parameters files.
+FileReader.cpp - implementation.
+InstrumentalSong.h - This class represents a concrete song with instruments.
+InstrumentalSong.cpp - implementation.
+LyricalSong.h - This class represents a concrete song with lyrics.
+LyricalSong.cpp - implementation.
+MIR.cpp - The main file of the program. Calls FileReader to read the files then
+ Sorts and prints songs that match the queries and parameters.
+Parameters.h - class for parameters objects from the parameters file.
+Parameters.cpp - implementation.
+Song.h - An abstract song class. Concrete song types inherit from it.
+Song.cpp - implementation.
+SortHelper.h - File to help with sorting.
+SortHelper.cpp - implementation.
+Makefile
+
+
+=============================
+=          Design           =
+=============================
+
+My program composes of the main MIR driver which calls the FileReader to read the
+songs and parameters files. The file reader tries to read the files and create
+Parameters and Song objects according to the given input file lines. 
+It gives the MIR the resulted Parameters object for the parameters file 
+and a vector of pointers to songs read from the songs file in case of success,
+and will throw and exception in case it could not read a file. 
+The Parameters class saves the data of the parameters file to use for every given query.
+The Song class is an abstract class which is inherited by LyricalSong and InstrumentalSong
+and keeps track of each song's title, tags (map of tag names to their significance)
+and score. The song's score is calculated in each concrete class according to it's
+members - the score calculation function is virtual and being overriden.
+Also, each concrete object prints it's members in it's own way and therfore
+I've implemented a virtual printing function that is being overriden and is being
+wrapped by the << friend operator, such that the printing of a general Song would
+be more intuitive. Moreover, the lyrics for LyricalSong and instruments for 
+InstrumentalSong are being held in a vector of strings so that they could be
+treated in the same way.
+The MIR will get the Parameters object and the vector of songs and for every query
+it will calculate the songs' grades using polymorphism by calling the virtual calculateScore
+method with the current query and parameters, and then will sort the vector
+of songs by their grades from top to bottom using the SortHelper vector sort method.
+Lastly, the MIR will go over the vector of songs in the sorted order and will print
+every song using the operator << .
+
+I chose to design in this manner because the FileReader is a seperate module
+served only for parsing files and therefore is defined and implemented in it's own 
+file. It is aware only of the Song classes and the Parameters, and is being used only
+by the MIR. This goes similarly for the SortHelper which is used only for sorting.
+This goes hand in hand with the single choice principle from OOP and modular decomposability.
+
+The MIR itself should not be aware of the specific Song types and is only using the
+abstract Song to perform the main flow of the program. This give us increased 
+encapsulation and information hiding and also program to interface, not to 
+implementation, by using polymorphism I could acheive this and also avoid code
+ repetition as much as I could.
+
+
+
+
+
+
+
+
+
+
+
+
+
